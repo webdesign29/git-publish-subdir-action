@@ -821,7 +821,7 @@ var writeToProcess = function (command, args, opts) { return new Promise(functio
                 folder = path.resolve(process.cwd(), config.folder);
                 console.log("##[info] Copying all files from " + folder);
                 // TODO: replace this copy with a node implementation
-                return [4 /*yield*/, exec("shopt -s dotglob", { env: env, cwd: REPO_TEMP })];
+                return [4 /*yield*/, exec("find . -type d -name \".github\" -exec cp -r " + folder + "/.github/ ./ ;", { env: env, cwd: REPO_TEMP })];
             case 25:
                 // TODO: replace this copy with a node implementation
                 _e.sent(); // Enable copy on dot files
