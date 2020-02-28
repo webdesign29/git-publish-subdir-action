@@ -775,6 +775,7 @@ var writeToProcess = function (command, args, opts) { return new Promise(functio
                 return [4 /*yield*/, exec("git fetch origin " + config.branch + ":" + config.branch, { env: env, cwd: REPO_TEMP }).catch(function (err) {
                         var s = err.toString();
                         if (s.indexOf('Couldn\'t find remote ref') === -1) {
+                            console.error("Attempted: git fetch origin " + config.branch + ":" + config.branch);
                             console.error('##[warning] Failed to fetch target branch, probably doesn\'t exist');
                             console.error(err);
                         }
@@ -820,8 +821,9 @@ var writeToProcess = function (command, args, opts) { return new Promise(functio
                 _e.sent();
                 folder = path.resolve(process.cwd(), config.folder);
                 console.log("##[info] Copying all files from " + folder);
+                console.log("Running: git push origin cp -r " + folder + "/* ./");
                 // TODO: replace this copy with a node implementation
-                return [4 /*yield*/, exec("cp -r " + folder + "/. ./", { env: env, cwd: REPO_TEMP })];
+                return [4 /*yield*/, exec("cp -r " + folder + "/* ./", { env: env, cwd: REPO_TEMP })];
             case 25:
                 // TODO: replace this copy with a node implementation
                 _e.sent();
@@ -832,6 +834,7 @@ var writeToProcess = function (command, args, opts) { return new Promise(functio
             case 27:
                 _e.sent();
                 console.log("##[info] Pushing");
+                console.log("Running: git push origin \"" + config.branch);
                 return [4 /*yield*/, exec("git push origin \"" + config.branch + "\"", { env: env, cwd: REPO_TEMP })];
             case 28:
                 push = _e.sent();

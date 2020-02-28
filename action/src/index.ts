@@ -261,6 +261,7 @@ const writeToProcess = (command: string, args: string[], opts: {env: { [id: stri
   await exec(`git fetch origin ${config.branch}:${config.branch}`, { env, cwd: REPO_TEMP }).catch(err => {
     const s = err.toString();
     if (s.indexOf('Couldn\'t find remote ref') === -1) {
+      console.error(`Attempted: git fetch origin ${config.branch}:${config.branch}`)
       console.error('##[warning] Failed to fetch target branch, probably doesn\'t exist')
       console.error(err);
     }
@@ -286,11 +287,13 @@ const writeToProcess = (command: string, args: string[], opts: {env: { [id: stri
   await exec(`git rm -rf .`, { env, cwd: REPO_TEMP }).catch(err => { });
   const folder = path.resolve(process.cwd(), config.folder);
   console.log(`##[info] Copying all files from ${folder}`);
+  console.log(`Running: git push origin cp -r ${folder}/* ./`);
   // TODO: replace this copy with a node implementation
-  await exec(`cp -r ${folder}/. ./`, { env, cwd: REPO_TEMP });
+  await exec(`cp -r ${folder}/* ./`, { env, cwd: REPO_TEMP });
   await exec(`git add -A .`, { env, cwd: REPO_TEMP });
   await exec(`git commit --allow-empty -m "Update ${config.branch} to output generated at ${sha}"`, { env, cwd: REPO_TEMP });
   console.log(`##[info] Pushing`);
+  console.log(`Running: git push origin "${config.branch}`);
   const push = await exec(`git push origin "${config.branch}"`, { env, cwd: REPO_TEMP });
   console.log(push.stdout);
   console.log(`##[info] Deployment Successful`);
