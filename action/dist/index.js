@@ -825,25 +825,28 @@ var writeToProcess = function (command, args, opts) { return new Promise(functio
             case 25:
                 // TODO: replace this copy with a node implementation
                 _e.sent();
-                return [4 /*yield*/, exec("git add -A .", { env: env, cwd: REPO_TEMP })];
+                return [4 /*yield*/, exec("rm -rf " + folder + "/.github", { env: env, cwd: REPO_TEMP })];
             case 26:
                 _e.sent();
-                return [4 /*yield*/, exec("git commit --allow-empty -m \"Update " + config.branch + " to output generated at " + sha + "\"", { env: env, cwd: REPO_TEMP })];
+                return [4 /*yield*/, exec("git add -A .", { env: env, cwd: REPO_TEMP })];
             case 27:
+                _e.sent();
+                return [4 /*yield*/, exec("git commit --allow-empty -m \"Update " + config.branch + " to output generated at " + sha + "\"", { env: env, cwd: REPO_TEMP })];
+            case 28:
                 _e.sent();
                 console.log("##[info] Pushing");
                 return [4 /*yield*/, exec("git push origin \"" + config.branch + "\"", { env: env, cwd: REPO_TEMP })];
-            case 28:
+            case 29:
                 push = _e.sent();
                 console.log(push.stdout);
                 console.log("##[info] Deployment Successful");
-                if (!(config.mode === 'ssh')) return [3 /*break*/, 30];
+                if (!(config.mode === 'ssh')) return [3 /*break*/, 31];
                 console.log("##[info] Killing ssh-agent");
                 return [4 /*yield*/, exec("ssh-agent -k", { env: env })];
-            case 29:
+            case 30:
                 _e.sent();
-                _e.label = 30;
-            case 30: return [2 /*return*/];
+                _e.label = 31;
+            case 31: return [2 /*return*/];
         }
     });
 }); })().catch(function (err) {
