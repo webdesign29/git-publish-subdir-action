@@ -287,8 +287,7 @@ const writeToProcess = (command: string, args: string[], opts: {env: { [id: stri
   const folder = path.resolve(process.cwd(), config.folder);
   console.log(`##[info] Copying all files from ${folder}`);
   // TODO: replace this copy with a node implementation
-  await exec(`find . -type d -name ".github" -exec cp -r ${folder}/.github/ ./ \'';\''`, { env, cwd: REPO_TEMP }); // Enable copy on dot files
-  await exec(`cp -r ${folder}/* ./`, { env, cwd: REPO_TEMP });
+  await exec(`cp -r ${folder}/. ./`, { env, cwd: REPO_TEMP });
   await exec(`git add -A .`, { env, cwd: REPO_TEMP });
   await exec(`git commit --allow-empty -m "Update ${config.branch} to output generated at ${sha}"`, { env, cwd: REPO_TEMP });
   console.log(`##[info] Pushing`);
